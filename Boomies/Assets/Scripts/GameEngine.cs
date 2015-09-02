@@ -60,12 +60,12 @@ public class GameEngine : MonoBehaviour {
 		if (PlayerPrefs.HasKey("boomiesLanguage") && PlayerPrefs.GetString("boomiesLanguage").Equals("FR"))
 		{
 			exitText.text = "QUITTER";
-			returnText.text = "RETOUR";
+			returnText.text = "CONTINUER";
 		}
 		else
 		{
 			exitText.text = "EXIT";
-			returnText.text = "RETURN";
+			returnText.text = "CONTINUE";
 		}
 
 		if (PlayerPrefs.HasKey("boomiesStatus") && PlayerPrefs.GetInt("boomiesStatus").Equals(0))
@@ -116,7 +116,7 @@ public class GameEngine : MonoBehaviour {
 
 	public void ExitApp()
 	{
-		Application.Quit ();
+		Application.LoadLevel ("menu");
 	}
 
 	public void ReturnToGame()
@@ -214,6 +214,8 @@ public class GameEngine : MonoBehaviour {
 		}
 	}
 
+	public float scaryRadiusAfterBoomiesDeath;
+
 	public void BoomieDied(GameObject deadBoomie)
 	{
 		StartCoroutine (WaitAndPlayStopSound (0.1f, backgroundMusic, false));
@@ -222,7 +224,7 @@ public class GameEngine : MonoBehaviour {
 		bool playScreams = false;
 		foreach (GameObject boomie in listOfBoomies)
 		{
-			if ( (boomie.transform.position - deadBoomiePosition).magnitude < 40)
+			if ( (boomie.transform.position - deadBoomiePosition).magnitude < scaryRadiusAfterBoomiesDeath)
 			{
 				boomie.GetComponent<BoomieBehaviour>().RunawayFromPosition(deadBoomiePosition, true);
 			}
@@ -321,7 +323,7 @@ public class GameEngine : MonoBehaviour {
 		Vector3 position = Vector3.Lerp(boomieBuilder1.transform.position, boomieBuilder2.transform.position, 0.5f);
 		if (CheckForDistanceBetweenGenerators (position, false)) 
 		{
-			GameObject newCubeGen = (GameObject)Instantiate (cubeGeneratorPrefab, new Vector3 (position.x, 2.5f, position.z), Quaternion.LookRotation (boomieBuilder2.transform.position - boomieBuilder1.transform.position));
+			GameObject newCubeGen = (GameObject)Instantiate (cubeGeneratorPrefab, new Vector3 (position.x, 2.0f, position.z), Quaternion.LookRotation (boomieBuilder2.transform.position - boomieBuilder1.transform.position));
 			newCubeGen.transform.GetChild (0).GetComponent<GeneratorBehaviour> ().gameEngine = this;
 			listOfGenerators.Add (newCubeGen);
 			generatorBuilt = true;

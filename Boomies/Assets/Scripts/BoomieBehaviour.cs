@@ -11,7 +11,9 @@ public class BoomieBehaviour : MonoBehaviour {
 	public Material sorryMat;
 
 	private Vector3 direction;
-	public float speed;
+	public float walkingSpeed;
+	public float runningSpeed;
+	private float speed;
 
 	private float lastDirectionChangeTime;
 	private float directionChangeTimer;
@@ -50,6 +52,7 @@ public class BoomieBehaviour : MonoBehaviour {
 		lastConversationTime = Time.time;
 		canHoldACube = true;
 		canHoldASphere = true;
+		speed = walkingSpeed;
 	}
 	
 	// Update is called once per frame
@@ -110,7 +113,10 @@ public class BoomieBehaviour : MonoBehaviour {
 	IEnumerator WaitAndEndConversation(float time, GameObject interlocuteur)
 	{
 		yield return new WaitForSeconds (time);
-		RunawayFromPosition (interlocuteur.transform.position, false);
+		if (interlocuteur != null)
+		{
+			RunawayFromPosition (interlocuteur.transform.position, false);
+		}
 		busy = false;
 		boomieMesh.GetComponent<Animator> ().SetBool ("Talking", false);
 	}
@@ -152,7 +158,7 @@ public class BoomieBehaviour : MonoBehaviour {
 		scared = isScared;
 		if (scared)
 		{
-			speed = 300;
+			speed = runningSpeed;
 		}
 		boomieMesh.GetComponent<Animator> ().SetBool ("Scared", isScared);
 		UpdateScaredMaterial ();
@@ -168,7 +174,7 @@ public class BoomieBehaviour : MonoBehaviour {
 		holdDirectionChange = false;
 		scared = false;
 		UpdateScaredMaterial ();
-		speed = 200;
+		speed = walkingSpeed;
 		boomieMesh.GetComponent<Animator> ().SetBool ("Talking", false);
 		boomieMesh.GetComponent<Animator> ().SetBool ("Scared", false);
 	}
@@ -203,7 +209,7 @@ public class BoomieBehaviour : MonoBehaviour {
 			cubes++;
 			UpdateSphereAndCube();
 		}
-		if (col.collider.tag.Equals("Boomie"))
+		if (col.collider.tag.Equals("Boomie") && !scared)
 		{
 			this.GetComponent<Rigidbody> ().velocity = Vector3.zero;
 			this.GetComponent<Rigidbody> ().angularVelocity = Vector3.zero;

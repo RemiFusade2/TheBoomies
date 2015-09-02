@@ -81,6 +81,7 @@ public class MainMenuBehaviour : MonoBehaviour {
 	public void ClearCache()
 	{
 		PlayerPrefs.DeleteAll ();
+		PlayerPrefs.SetString (boomiesLanguageKey, language);
 		PlayerPrefs.Save ();
 	}
 

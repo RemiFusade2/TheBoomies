@@ -8,6 +8,8 @@ public class GeneratorBehaviour : MonoBehaviour {
 	public int hp;
 
 	public AudioClip collapseSound;
+	
+	public float scaryRadiusAfterGeneratorShake;
 
 	// Use this for initialization
 	void Start () {
@@ -38,7 +40,7 @@ public class GeneratorBehaviour : MonoBehaviour {
 			}
 			this.GetComponent<AudioSource>().Play();
 			gameEngine.SuspendBackgroundMusicFor(4);
-			gameEngine.ScareAllBoomies(this.transform.position, 20);
+			gameEngine.ScareAllBoomies(this.transform.position, scaryRadiusAfterGeneratorShake);
 			gameEngine.ChangeTextsAfterGeneratorHit();
 		}
 	}
